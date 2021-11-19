@@ -1,0 +1,21 @@
+<idea-plugin>
+    <id>net.ratb3rt.jetbrains.bigquery_analyzer_plugin</id>
+    <name>BigQuery Query Plan Visualiser</name>
+    <vendor email="ratb3rt@gmail.com">Rich Dean</vendor>
+
+    <description><![CDATA[
+    Reads execution plan from last Bigquery query, and generates a graph.<br>
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
