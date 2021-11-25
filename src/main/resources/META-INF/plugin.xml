@@ -13,7 +13,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable parentId="tools" instance="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.Settings"
-                                 id="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.Settings" displayName="BigQuery Query Plan Visualiser Settings"/>
+                                 id="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.Settings"
+                                 displayName="BigQuery Query Plan Visualiser Settings"/>
         <applicationService serviceImplementation="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.SettingsState"/>
     </extensions>
 
@@ -22,6 +23,10 @@
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <action id="MyPlugin.Hello" class="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.BigQueryPlanViz"
                     text="BigQuery Plan Viz" description="Visualise BigQuery Query Plan"/>
+        </group>
+        <group id="TopMenu" text="InputBox" description="Handling user input demo">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="DisplayInputBox" class="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.DisplayInputDialog" text="InputBox Demo"/>
         </group>
     </actions>
 </idea-plugin>

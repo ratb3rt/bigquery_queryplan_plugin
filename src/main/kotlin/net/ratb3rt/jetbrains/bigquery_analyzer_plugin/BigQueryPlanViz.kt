@@ -6,14 +6,12 @@ import com.intellij.notification.Notification
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.project.DumbAwareAction
+import com.intellij.openapi.project.Project
 import java.io.File
 
 
 class BigQueryPlanViz : DumbAwareAction() {
-
-    private val price = 6.0 / (1L shl 40)
 
     override fun actionPerformed(event: AnActionEvent) {
         try {
@@ -74,5 +72,18 @@ class BigQueryPlanViz : DumbAwareAction() {
 
 
         return "Something...."
+    }
+
+    companion object {
+        @JvmStatic
+        fun createAndShowQueryPlan(jobId: String) {
+            Notifications.Bus.notify(
+                Notification(
+                    Notifications.SYSTEM_MESSAGES_GROUP_ID,
+                    "Hola!",
+                    "I'll try to get $jobId", NotificationType.INFORMATION
+                )
+            )
+        }
     }
 }

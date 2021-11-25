@@ -11,7 +11,7 @@ import guru.nidi.graphviz.model.Factory.*
 import kotlinx.html.*
 import kotlinx.html.stream.createHTML
 
-class TestQueryPlan {
+class TestQueryPlan(val keyPath: String, val useADC: Boolean) {
     private fun getBigQueryClient(keyPath: String, applicationDefault: Boolean): BigQuery {
         if (!applicationDefault && keyPath == "") {
             throw Exception(
@@ -73,10 +73,16 @@ class TestQueryPlan {
         return map[cleaned] ?: map["default"]
     }
 
-    fun jobQueryPlan(jobId: String, project: String, keyPath: String, useADC: Boolean): Map<String, List<QueryStage>> {
-        val client = getBigQueryClient(keyPath, useADC)
+    fun jobQueryPlan(jobId: String, project: String): Map<String, List<QueryStage>> {
+        val client = getBigQueryClient(this.keyPath, this.useADC)
         val queryPlanFull = getQueryPlanDetails(client, jobId, "US")
         return queryPlanFull
+    }
+
+    fun lastJobId(): String {
+        // TODO handle errors
+        val client = getBigQueryClient(this.keyPath, this.useADC)
+        return client.listJobs().iterateAll().first().jobId.job ?: ""
     }
 
     private fun nodeName(stage: QueryStage, jobId: String): String {
@@ -128,30 +134,19 @@ class TestQueryPlan {
                     myNodes[nodeName(jobStages[inputStage.toInt()], jobId)]!!
                         .addLink(myNodes[nodeName(jobStage, jobId)])
                         .add(Label.of(((shuffleOut[inputStage] ?: 0) / 1024 / 1024).toString() + " MB"))
-// need to get label working
+                    // TODO need to get label working
                     myGraph.add(myNodes[nodeName(jobStages[inputStage.toInt()], jobId)])
 
-                    // self._dot.edge(self._node_id(job_stages[input_stage], job_id), self._node_id(stage, job_id),
-                    //         label=f"{shuffle_out[job_stages[input_stage].entry_id]/1024/1024:.0f} MB")
                 }
             }
         }
         myGraph.toGraphviz().render(Format.PNG).toFile(File("example/ex1.png"))
     }
-
-    fun graphTest() {
-        val myGraph = graph(directed = true)
-        val tnode = mutNode("shitty").add(Color.RED)
-        myGraph.add(tnode)
-        //myGraph.toGraphviz().render(Format.DOT).toFile(File("example/ex1.txt"))
-        //myGraph.toGraphviz().render(Format.PNG).toFile(File("example/ex1.png"))
-    }
 }
 
 fun main(args: Array<String>) {
-
-    val qp = TestQueryPlan()
-    val keyPath = "/Users/ratb3rt/.secrets/amazing_pipe_bq_access.json"
-    val stages = qp.jobQueryPlan("bquxjob_7f666a7c_17d3a5e7e59", "amazing-pipe-124612", keyPath, false)
+    val qp = TestQueryPlan("", true)
+    val jobId = qp.lastJobId()
+    val stages = qp.jobQueryPlan(jobId, "amazing-pipe-124612")
     qp.stagesToDot(stages)
 }
