@@ -12,10 +12,16 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <applicationConfigurable parentId="tools" instance="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.Settings"
+                                 id="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.Settings" displayName="BigQuery Query Plan Visualiser Settings"/>
+        <applicationService serviceImplementation="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.SettingsState"/>
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <group id="BigQueryPlanViz">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <action id="MyPlugin.Hello" class="net.ratb3rt.jetbrains.bigquery_analyzer_plugin.BigQueryPlanViz"
+                    text="BigQuery Plan Viz" description="Visualise BigQuery Query Plan"/>
+        </group>
     </actions>
 </idea-plugin>
